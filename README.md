@@ -6,7 +6,7 @@ The previous PDF version of my resume was generated with a FRESH resume JSON to 
 button and the PDF is locked when open in Reader so it will not overwrite when transforming). As a front-end developer I want to leverage browser sync to make 
 the develop/review cycle more efficient. Done with pdfkit and browsersync.
 
-@TODO The FRESH resume JSON, photo and the generated PDF for my own resume are not public, but I did included an example json, photo and PDF.
+The FRESH resume JSON, photo and the generated PDF for my own resume are not public, but I did include an example json (./example-resume.json), photo (./example-photo.jpg) and PDF (./output/example-output.png).
 
 maybe even with XSL:FO or server side pdfkit and PDF watch -> to blob -> to BlobURL -> iframe (conform iframe.src = stream.toBlobURL('application/pdf');)
 Explain the difference from the live preview because the server and client side lib of pdfkit would differ and I don't need real-time updates anyway, at least
