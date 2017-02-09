@@ -37,9 +37,6 @@ To use automatic watching, modify these arguments in the _transform_ task in pac
 
 # TODO
 
+* implement a full template that can render an entire resume.json
 * linting: eslint app/**/*.js fails because pdf.js contains async and that is an experimental feature which [can't be parsed by eslint directly](https://github.com/babel/eslint-plugin-babel/issues/6), this might be fixed by using eslint-babel parser.
-* input/output/photo paths as params
-* photo path can be taken from input.json
-* template as param
-* finalize template
 * See also https://github.com/MrRio/jsPDF (.docx support: https://github.com/MrRio/DOCX.js)
