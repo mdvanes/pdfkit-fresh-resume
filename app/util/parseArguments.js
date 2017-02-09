@@ -3,7 +3,6 @@
 
 let inputPath = null;
 let outputName = null;
-let photoPath = null;
 
 if(process.argv.length > 2 && process.argv[2]) {
     console.log(`Input path for FRESH JSON: ${process.argv[2]}`); // eslint-disable-line no-console
@@ -23,12 +22,4 @@ if(process.argv.length > 3 && process.argv[3]) {
     throw new Error(msg);
 }
 
-if(process.argv.length > 4 && process.argv[4]) {
-    console.log(`Input path for photo: ${process.argv[4]}`); // eslint-disable-line no-console
-    photoPath = process.argv[4];
-} else {
-    const msg = 'Input path for photo optional third argument';
-    console.log(`WARN: ${msg}`); // eslint-disable-line no-console
-}
-
-module.exports = { inputPath, outputName, photoPath };
+module.exports = { inputPath, outputName };
