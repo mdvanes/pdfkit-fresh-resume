@@ -21,15 +21,21 @@ not while typing in the browser.
 # Run
 
 * `nvm use 7.4.0` (7+ needed for async/await)
+// async/await requires node 7.x and harmony flag
+// nvm use 7.4.0
+// node --harmony transformer/pdf.js
 * npm i
 * npm run watch
 * npm run dev
 * open http://localhost:3000/preview.html
 
+Note: Expecting input path to JSON relative to project root
+
 # TODO
 
-* linting
+* linting: eslint app/**/*.js fails because pdf.js contains async and that is an experimental feature which [can't be parsed by eslint directly](https://github.com/babel/eslint-plugin-babel/issues/6), this might be fixed by using eslint-babel parser.
 * input/output/photo paths as params
+* photo path can be taken from input.json
 * template as param
 * finalize template
 * See also https://github.com/MrRio/jsPDF (.docx support: https://github.com/MrRio/DOCX.js)

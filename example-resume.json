@@ -1,0 +1,41 @@
+{
+  "name": "John Smith",
+
+  "meta": {
+    "format": "FRESH@0.6.0",
+    "version": "1.0.0"
+  },
+
+  "info": {
+    "image": "photo.jpg",
+    "label": "label",
+    "characterClass": "Programmer",
+    "brief": "lorem ipsum"
+  },
+
+  "location": {
+    "address": "Lorem ipsum",
+    "city": "Lorem ipsum",
+    "code": "Lorem ipsum",
+    "country": "Lorem ipsum"
+  },
+
+  "employment": {
+    "summary": "",
+    "history": [
+      {
+        "employer": "Example Inc.",
+        "url": "http://www.example.org",
+        "position": "Software Developer",
+        "summary": "Lorem ipsum",
+        "start": "2012-11",
+        "keywords": [
+        ],
+        "highlights": [
+          "Lorem ipsum"
+        ]
+      }    
+    ]
+  }
+
+}
