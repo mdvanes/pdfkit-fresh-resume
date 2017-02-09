@@ -7,7 +7,7 @@
   },
 
   "info": {
-    "image": "photo.jpg",
+    "image": "example-photo.jpg",
     "label": "label",
     "characterClass": "Programmer",
     "brief": "lorem ipsum"

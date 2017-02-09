@@ -20,7 +20,7 @@ function addContent(doc, inputJson) {
     if(inputJson.info && inputJson.info.image) {
         doc.circle(300, 70, 40)
             .clip()
-            .image(inputJson.info.image, 210, -35, { width: 200 });
+            .image(inputJson.info.image, 260, 30, { width: 80 });
     }
 
     doc.end();
