@@ -18,18 +18,22 @@ not while typing in the browser.
 5. remove babel and webpack?
 6. linting
 
+
 # Run
 
-* `nvm use 7.4.0` (7+ needed for async/await)
-// async/await requires node 7.x and harmony flag
-// nvm use 7.4.0
-// node --harmony transformer/pdf.js
+Because async/await is used, NPM 7+ is required and node needs to be started with the --harmony flag
+
+* `nvm use 7.4.0`
 * npm i
 * npm run watch
 * npm run dev
-* open http://localhost:3000/preview.html
+* open http://localhost:3000/preview.html for preview
+* generated PDF is also in /output
 
-Note: Expecting input path to JSON relative to project root
+Basic usage: `node --harmony app/transformer/pdf.js example-resume.json example-output`, where example-resume.json is the path to the input JSON relative to the project root and example-output is the name of the PDF (without extension) that will be created in in /output (in this case it would create /output/example-output.pdf)
+
+To use automatic watching, modify these arguments in the _transform_ task in package.json.
+
 
 # TODO
 
