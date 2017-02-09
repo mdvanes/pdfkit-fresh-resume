@@ -37,7 +37,6 @@ resumeTemplate.addContent(doc, inputJson);
 const pdfToBlob = async function() {
     try {
         const dataUriOfPdf = await DataURI(outputPath);
-        //console.log('dataUriOfPdf=', dataUriOfPdf);
         const blobJsContent = `var convertedPfdDataURL = '${dataUriOfPdf}';`;
         await fsPromise.writeFilePromise('./output/generated-pdf-as-blob.js', blobJsContent);
     } catch(err) {
