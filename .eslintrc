@@ -1,0 +1,34 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+    }
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "camelcase": "error",
+    "complexity": ["off", 3],
+    "curly": "error",
+    "no-mixed-spaces-and-tabs": "error",
+    "eqeqeq": "error",
+    "indent": ["error", 4],
+    "new-cap": "error",
+    "no-alert": "warn",
+    "no-bitwise": "error",
+    "no-caller": "error",
+    "no-console": "warn",
+    "no-invalid-regexp": "error",
+    "no-trailing-spaces": "error",
+    "no-undef": "error",
+    "no-unused-vars": ["error", { "vars": "all", "args": "none"}],
+    "no-use-before-define": "error",
+    "quotes": ["error", "single"],
+    "strict": ["error", "function"],
+    "wrap-iife": ["error", "inside"]
+  }
+}

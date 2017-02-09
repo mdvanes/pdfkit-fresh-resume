@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Preview of generated pdf</title>
+    </head>
+    <body>
+        <p>Preview of generated pdf with live reload</p>
+        <iframe width="600px" height="855px" src="#"></iframe>
+        <script src="generated-pdf-as-blob.js"></script>
+        <script>
+// from generated-pdf-as-blob.js // var convertedPfdDataURL = "";            
+const iframe = document.querySelector('iframe');
+iframe.src = convertedPfdDataURL;            
+        </script>
+    </body>
+</html>
