@@ -1,0 +1,27 @@
+{
+  "name": "resume",
+  "version": "1.0.0-alpha.1",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "transform": "node_modules/.bin/eslint template/resume.js && node --harmony transformer/pdf.js",
+    "dev": "node_modules/.bin/browser-sync start --config bs-config.js",
+    "watch": "npm-watch"
+  },
+  "watch": {
+    "transform": "{transformer,util,template}/*.js"
+  },
+  "author": "M.D. van Es",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-loader": "^1.6.1"
+  },
+  "dependencies": {
+    "browser-sync": "^2.18.7",
+    "datauri": "^1.0.5",
+    "npm-watch": "^0.1.8",
+    "pdfkit": "^0.8.0"
+  }
+}
