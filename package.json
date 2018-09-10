@@ -3,14 +3,13 @@
   "version": "1.0.0-alpha.1",
   "description": "",
   "main": "index.js",
-  "private": true,
   "scripts": {
     "transform": "node_modules/.bin/eslint app/{util,template}/*.js && node --harmony app/transformer/pdf.js example-resume.json example-output",
     "dev": "node_modules/.bin/browser-sync start --config bs-config.js",
     "watch": "npm-watch"
   },
   "watch": {
-    "transform": "{transformer,util,template}/*.js"
+    "transform": ["{transformer,util,template}/*.js", "*.json"]
   },
   "author": "M.D. van Es",
   "license": "MIT",

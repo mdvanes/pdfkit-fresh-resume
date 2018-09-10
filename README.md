@@ -24,18 +24,32 @@ Details about how the preview is generated:
 
 # Run
 
-Because async/await is used, NPM 7+ is required and node needs to be started with the --harmony flag
+Because async/await is used, NPM 9 is required.
 
-* `nvm use 7.4.0`
+* `nvm use 9`
 * `npm i`
 * `npm run watch`
 * `npm run dev` (in second terminal)
 * open http://localhost:3000/preview.html for preview
 * generated PDF is stored in /output
 
-Basic usage: `node --harmony app/transformer/pdf.js example-resume.json example-output`, where example-resume.json is the path to the input JSON relative to the project root and example-output is the name of the PDF (without extension) that will be created in in /output (in this case it would create /output/example-output.pdf)
+Basic usage: `node -app/transformer/pdf.js example-resume.json example-output`, where example-resume.json is the path to the input JSON relative to the project root and example-output is the name of the PDF (without extension) that will be created in in /output (in this case it would create /output/example-output.pdf)
 
 To use automatic watching, modify these arguments in the _transform_ task in package.json.
+
+
+# Target implementation
+
+* `npm use`
+* `npm i`
+* `node index.js examples/example-resume.json output`
+
+or globally:
+
+* `npm use 9`
+* `npm i -g pdfkit-fresh-resume`
+* `pdfkit-fresh-resume ~/.npm/pdfkit-fresh-resume/examples/example-resume.json output`
+
 
 
 # TODO
