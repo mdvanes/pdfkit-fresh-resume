@@ -31,9 +31,8 @@ resumeTemplate.addContent(doc, inputJson);
 //    });
 //}
 
-// async/await requires node 7.x and harmony flag
-// nvm use 7.4.0
-// node --harmony transformer/pdf.js
+// async/await requires node 8+
+// node transformer/pdf.js
 const pdfToBlob = async function() {
     try {
         const dataUriOfPdf = await DataURI(outputPath);
