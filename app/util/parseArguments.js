@@ -4,6 +4,7 @@
 let inputPath = null;
 let outputName = null;
 
+// TODO replace by yargs. Support -w (watch) flag and -t (template) flag
 if(process.argv.length > 2 && process.argv[2]) {
     console.log(`Input path for FRESH JSON: ${process.argv[2]}`); // eslint-disable-line no-console
     inputPath = process.argv[2];
