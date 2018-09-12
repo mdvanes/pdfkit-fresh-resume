@@ -10,14 +10,14 @@
     "image": "example-photo.jpg",
     "label": "label",
     "characterClass": "Programmer",
-    "brief": "lorem ipsum"
+    "brief": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in suscipit purus.  Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus nec hendrerit felis. Morbi aliquam facilisis risus eu lacinia. Sed eu leo in turpis fringilla hendrerit. Ut nec accumsan nisl.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in suscipit purus.  Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus nec hendrerit felis. Morbi aliquam facilisis risus eu lacinia. Sed eu leo in turpis fringilla hendrerit. Ut nec accumsan nisl."
   },
 
   "location": {
-    "address": "Lorem ipsum",
-    "city": "Lorem ipsum",
-    "code": "Lorem ipsum",
-    "country": "Lorem ipsum"
+    "address": "Streetname 1",
+    "city": "Cityname",
+    "code": "Z1PC0D3",
+    "country": "Countryname"
   },
 
   "employment": {
@@ -53,6 +53,64 @@
           "Lorem ipsum",
           "dolor sit"
         ]
+      }
+    ]
+  },
+
+  "education": {
+    "summary": "",
+    "level": "degree",
+    "degree": "MSc",
+    "history": [
+      {
+        "institution": "Example University",
+        "title": "MSc",
+        "url": "https://www.example.com",
+        "start": "2005-09",
+        "end": "2008-05",
+        "grade": "3.5",
+        "summary": "A multiline summary of the education.",
+        "curriculum": ["Course 1", "Course 2", "Course 2"]
+      },
+      {
+        "institution": "Example MOOC",
+        "title": "",
+        "url": "https://example.com",
+        "start": "2009-03",
+        "end": "2009-04",
+        "grade": "3.2",
+        "summary": "A multiline summary of the education.",
+        "curriculum": ["Course 1", "Course 2", "Course 2"]
+      }
+    ]
+  },
+
+  "skills": {
+    "sets": [
+      {
+        "name": "Web",
+        "level": "advanced",
+        "skills": [
+          "JavaScript", "HTML", "CSS"
+        ]
+      },
+      {
+        "name": "JavaScript",
+        "level": "master",
+        "skills": [
+          "Node", "Angular", "React", "RxJs", "Redux"
+        ]
+      }
+    ],
+
+    "list": [
+      {
+        "name": "Python",
+        "id": "1",
+        "summary": "A summary",
+        "level": "9",
+        "years": 7,
+        "proof": "http://example.com"
       }
     ]
   }
