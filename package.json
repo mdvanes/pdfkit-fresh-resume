@@ -1,8 +1,11 @@
 {
-  "name": "resume",
+  "name": "pdfkit-fresh-resume",
   "version": "1.0.0-alpha.1",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "pdfkit-fresh-resume": "bin.js"
+  },
   "scripts": {
     "transform": "node_modules/.bin/eslint app/{util,template}/*.js && node --harmony app/transformer/pdf.js example-resume.json example-output",
     "dev": "node_modules/.bin/browser-sync start --config bs-config.js",
