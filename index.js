@@ -5,7 +5,6 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 // const fsPromise = require('../util/fsPromise');
 // const DataURI = require('datauri').promise;
-const resumeTemplate = require('./app/template/resume');
 
 // https://github.com/yargs/yargs/blob/master/docs/examples.md
 // eslint-disable-next-line no-unused-vars
@@ -35,7 +34,7 @@ const argv = require('yargs')
         console.log(`Trying to run with input ${argv.input} and output ${argv.output}`);
         // const pa = require('./app/util/parseArguments');
         // Example: node index.js run example-resume.json example-output.pdf -t -w
-        // TODO check if input exists
+        // TODO check if input file exists (warn: if relative path, must start with ./)
         const inputJson = JSON.parse(fs.readFileSync(argv.input)); // require(`./${pa.inputPath}`);
         // TODO check if argv.output ends in PDF
         const outputPath = argv.output; // `./output/${pa.outputName}.pdf`;
@@ -46,10 +45,8 @@ const argv = require('yargs')
         if(argv.watch) {
             console.log('Flag "watch" is not yet implemented');
         }
-        if(argv.template) {
-            console.log('Flag "template" is not yet implemented');
-        }
 
+        const resumeTemplate = argv.template ? require(argv.template) : require('./app/template/defaultTemplate');
         resumeTemplate.addContent(doc, inputJson);
     })
     .help()

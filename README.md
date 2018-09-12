@@ -42,15 +42,17 @@ To use automatic watching, modify these arguments in the _transform_ task in pac
 
 * `npm use`
 * `npm i`
-* `node index.js examples/example-resume.json output`
+* `node index.js run examples/example-resume.json output.pdf`
 
 or globally:
 
 * `npm use 9`
 * `npm i -g pdfkit-fresh-resume`
-* `pdfkit-fresh-resume ~/.npm/pdfkit-fresh-resume/examples/example-resume.json output`
+* `pdfkit-fresh-resume run ~/.npm/pdfkit-fresh-resume/examples/example-resume.json output.pdf`
 
+options:
 
+* With alternative template: `node index.js run example-resume.json output.pdf -t ./app/template/otherTemplate`
 
 # TODO
 
