@@ -28,11 +28,30 @@
         "url": "http://www.example.org",
         "position": "Software Developer",
         "summary": "Lorem ipsum",
-        "start": "2012-11",
+        "start": "2014-02",
         "keywords": [
+          "Tech",
+          "Other tech"
         ],
         "highlights": [
-          "Lorem ipsum"
+          "Lorem ipsum",
+          "dolor sit"
+        ]
+      },
+      {
+        "employer": "Example Inc.",
+        "url": "http://www.example.org",
+        "position": "Software Developer",
+        "summary": "Lorem ipsum",
+        "start": "2012-11",
+        "end": "2014-01",
+        "keywords": [
+          "Tech",
+          "Other tech"
+        ],
+        "highlights": [
+          "Lorem ipsum",
+          "dolor sit"
         ]
       }
     ]
