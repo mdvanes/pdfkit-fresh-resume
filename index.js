@@ -48,6 +48,7 @@ const argv = require('yargs')
         doc.pipe(fs.createWriteStream(outputPath));
 
         if(argv.watch) {
+            // TODO implement watch
             console.log('Flag "watch" is not yet implemented');
         }
 

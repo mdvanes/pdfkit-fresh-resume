@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /* eslint-env node */
-const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in suscipit purus.  Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus nec hendrerit felis. Morbi aliquam facilisis risus eu lacinia. Sed eu leo in turpis fringilla hendrerit. Ut nec accumsan nisl.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in suscipit purus.  Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus nec hendrerit felis. Morbi aliquam facilisis risus eu lacinia. Sed eu leo in turpis fringilla hendrerit. Ut nec accumsan nisl.';
+
+const DEFAULT_FONT_NORMAL = 'Helvetica';
+const DEFAULT_FONT_BOLD = 'Helvetica-Bold';
 
 const addEmploymentHistory = (doc, inputJson) => {
     doc
         .moveDown(1.5)
         .fontSize(25)
-        .font('Helvetica-Bold')
+        .font(DEFAULT_FONT_BOLD)
         .text('Employment');
 
     inputJson.employment.history.forEach(employmentItem => {
@@ -16,10 +18,10 @@ const addEmploymentHistory = (doc, inputJson) => {
         doc
             .moveDown(0.5)
             .fontSize(16)
-            .font('Helvetica-Bold')
+            .font(DEFAULT_FONT_BOLD)
             .text(`${employmentItem.position} at ${employmentItem.employer}`)
             .fontSize(12)
-            .font('Helvetica')
+            .font(DEFAULT_FONT_NORMAL)
             .text(`${employmentItem.url}`)
             .text(dates)
             .text(`${employmentItem.summary}`)
@@ -28,24 +30,73 @@ const addEmploymentHistory = (doc, inputJson) => {
     });
 };
 
-const addExampleColumns = (doc) => {
+const addMyStory = (doc, inputJson) => {
     // Multiple columns
+    if(inputJson.info.brief) {
+        doc
+            .moveDown(1.5)
+            .fontSize(25)
+            .font(DEFAULT_FONT_BOLD)
+            .text('My story')
+            .fontSize(12)
+            .font(DEFAULT_FONT_NORMAL)
+            .text(inputJson.info.brief, {
+                columns: 3,
+                columnGap: 15,
+                height: 150,
+                width: 465,
+                align: 'justify'
+            })
+            .moveDown(5);
+    }
+};
+
+const addEducation = (doc, inputJson) => {
     doc
-        .text(lorem, {
-            columns: 3,
-            columnGap: 15,
-            height: 150,
-            width: 465,
-            align: 'justify'
-        })
-        .moveDown(0.5);
+        .moveDown(1.5)
+        .fontSize(25)
+        .font(DEFAULT_FONT_BOLD)
+        .text('Education');
+    inputJson.education.history.forEach(education => {
+        const dates = education.end
+            ? `From ${education.start} to ${education.end}`
+            : `From ${education.start}`;
+        doc
+            .moveDown(0.5)
+            .fontSize(16)
+            .font(DEFAULT_FONT_BOLD)
+            .text(education.institution)
+            .fontSize(12)
+            .font(DEFAULT_FONT_NORMAL)
+            .text(dates);
+    });
+    doc.moveDown(0.5);
+
+};
+
+const addSkills = (doc, inputJson) => {
+    doc
+        .moveDown(1.5)
+        .fontSize(25)
+        .font(DEFAULT_FONT_BOLD)
+        .text('Skills')
+        .fontSize(12)
+        .font(DEFAULT_FONT_NORMAL);
+    inputJson.skills.sets.forEach(set => {
+        doc
+            .fontSize(16)
+            .font(DEFAULT_FONT_NORMAL)
+            .text(set.name)
+            .fontSize(12)
+            .text(set.skills.join(' | '));
+    })
 };
 
 function addContent(doc, inputJson, inputDir) {
     // Set font defaults
     doc
         .fontSize(12)
-        .font('Helvetica');
+        .font(DEFAULT_FONT_NORMAL);
 
     // Add primary personal information
     doc.text(`Name: ${inputJson.name}`, 50, 120);
@@ -69,7 +120,9 @@ function addContent(doc, inputJson, inputDir) {
 
     doc.addPage();
 
-    addExampleColumns(doc);
+    addMyStory(doc, inputJson);
+    addEducation(doc, inputJson);
+    addSkills(doc, inputJson);
 
     doc.end();
 }
