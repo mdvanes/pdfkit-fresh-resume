@@ -4,6 +4,7 @@
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
+const watch = require('watch');
 // const fsPromise = require('../util/fsPromise');
 // const DataURI = require('datauri').promise;
 
@@ -43,19 +44,55 @@ const argv = require('yargs')
         // console.log('test ' + inputDir);
         // TODO check if argv.output ends in PDF
         const outputPath = argv.output; // `./output/${pa.outputName}.pdf`;
-        const doc = new PDFDocument();
-        // const stream =
-        doc.pipe(fs.createWriteStream(outputPath));
 
         if(argv.watch) {
-            // TODO implement watch
+            // TODO implement watch. Should watch the input.json and the template
             console.log('Flag "watch" is not yet implemented');
+
+            // TODO do not watch all subdirs e.g. node_modules
+            // watch.watchTree(inputDir, function (f, curr, prev) {
+            //     // if (typeof f == "object" && prev === null && curr === null) {
+            //     //     // Finished walking the tree
+            //     //     return;
+            //     // }
+            // })
+            watch.createMonitor(inputDir, {
+                filter: file => {
+                    // if( file === path.resolve(argv.input) ) {
+                    //     console.log(file);
+                    // }
+                    return file === path.resolve(argv.input);
+                }
+            }, function (monitor) {
+                // monitor.files[argv.input];
+                monitor.on('created', function (f, stat) {
+                    // Handle new files
+                })
+                monitor.on('changed', function (f, curr, prev) {
+                    const newInputJson = JSON.parse(fs.readFileSync(argv.input)); // require(`./${pa.inputPath}`);
+                    // const inputDir = path.parse(path.resolve(argv.input)).dir + path.sep;
+                    // Handle file changes
+                    // console.log('changed', f)
+                    console.log(`Writing output to ${outputPath} (changes to ${f})`, f);
+                    const doc = new PDFDocument();
+                    // const stream =
+                    doc.pipe(fs.createWriteStream(outputPath));
+                    const resumeTemplate = argv.template ? require(argv.template) : require('./app/template/defaultTemplate');
+                    resumeTemplate.addContent(doc, newInputJson, inputDir);
+                })
+                monitor.on('removed', function (f, stat) {
+                    // Handle removed files
+                })
+                // monitor.stop(); // Stop watching
+            })
+        } else {
+            // TODO E.g. use this example https://github.com/fluentdesk/jane-q-fullstacker/blob/master/resume/jane-resume.json
+            const doc = new PDFDocument();
+            // const stream =
+            doc.pipe(fs.createWriteStream(outputPath));
+            const resumeTemplate = argv.template ? require(argv.template) : require('./app/template/defaultTemplate');
+            resumeTemplate.addContent(doc, inputJson, inputDir);
         }
-
-        // E.g. use this example https://github.com/fluentdesk/jane-q-fullstacker/blob/master/resume/jane-resume.json
-
-        const resumeTemplate = argv.template ? require(argv.template) : require('./app/template/defaultTemplate');
-        resumeTemplate.addContent(doc, inputJson, inputDir);
     })
     .help()
     .argv;
