@@ -3,6 +3,7 @@
 
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
+const path = require('path');
 // const fsPromise = require('../util/fsPromise');
 // const DataURI = require('datauri').promise;
 
@@ -10,13 +11,15 @@ const fs = require('fs');
 // eslint-disable-next-line no-unused-vars
 const argv = require('yargs')
     .usage('$0 <cmd> [args]')
-    .option('watch', {
-        alias: 'w',
-        describe: 'Description for watch option'
-    })
     .option('template', {
         alias: 't',
-        describe: 'Description for template option'
+        describe: 'Description for template option',
+        type: 'string'
+    })
+    .option('watch', {
+        alias: 'w',
+        describe: 'Description for watch option',
+        type: 'boolean'
     })
     .version() // taken from package.json
     .command('run [input] [output]', 'Run the transformation from JSON to PDF', (yargs) => {
@@ -31,11 +34,13 @@ const argv = require('yargs')
             describe: 'The filename for the output PDF, with extension'
         });
     }, function (argv) {
-        console.log(`Trying to run with input ${argv.input} and output ${argv.output}`);
+        console.log(`Trying to run with input "${argv.input}" and output "${argv.output}"`);
         // const pa = require('./app/util/parseArguments');
         // Example: node index.js run example-resume.json example-output.pdf -t -w
         // TODO check if input file exists (warn: if relative path, must start with ./)
         const inputJson = JSON.parse(fs.readFileSync(argv.input)); // require(`./${pa.inputPath}`);
+        const inputDir = path.parse(path.resolve(argv.input)).dir + path.sep;
+        // console.log('test ' + inputDir);
         // TODO check if argv.output ends in PDF
         const outputPath = argv.output; // `./output/${pa.outputName}.pdf`;
         const doc = new PDFDocument();
@@ -46,8 +51,10 @@ const argv = require('yargs')
             console.log('Flag "watch" is not yet implemented');
         }
 
+        // E.g. use this example https://github.com/fluentdesk/jane-q-fullstacker/blob/master/resume/jane-resume.json
+
         const resumeTemplate = argv.template ? require(argv.template) : require('./app/template/defaultTemplate');
-        resumeTemplate.addContent(doc, inputJson);
+        resumeTemplate.addContent(doc, inputJson, inputDir);
     })
     .help()
     .argv;
