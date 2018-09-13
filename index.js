@@ -83,14 +83,9 @@ const argv = require('yargs')
                 // monitor.stop(); // Stop watching
             });
             // TODO Watch changes to the template dir (can have dependencies)
-            console.log('TEST1', resumeTemplateDir)
             watch.createMonitor(resumeTemplateDir, {
                 filter: file => {
-                    // if( file === path.resolve(argv.input) ) {
-                    //     console.log(file);
-                    // }
-                    console.log(file)
-                    return true; //file === path.resolve(argv.input); // TODO extension should be .js
+                    return path.parse(file).ext === '.js';
                 }
             }, monitor => {
                 // monitor.files[argv.input];
