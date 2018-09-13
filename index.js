@@ -8,8 +8,9 @@ const watch = require('watch');
 // const fsPromise = require('../util/fsPromise');
 // const DataURI = require('datauri').promise;
 
+// TODO all these static files into an object with destructuring
 const runTransformation = (inputJson, inputDir, outputPath, resumeTemplatePath) => {
-    const newResumeTemplate = require(resumeTemplatePath);
+    const newResumeTemplate = require(resumeTemplatePath); // TODO not taking the updated template.js
     const doc = new PDFDocument();
     // const stream =
     doc.pipe(fs.createWriteStream(outputPath));
@@ -19,35 +20,12 @@ const runTransformation = (inputJson, inputDir, outputPath, resumeTemplatePath) 
 const runOnChange = (watchDir, filter, inputJsonPath, inputDir, outputPath, resumeTemplatePath) => {
     watch.createMonitor(watchDir, {
         filter
-        // filter: file => {
-        //     // if( file === path.resolve(argv.input) ) {
-        //     //     console.log(file);
-        //     // }
-        //     return file === path.resolve(argv.input);
-        // }
     }, monitor => {
-        // monitor.files[argv.input];
-        // monitor.on('created', function (f, stat) {
-        //     // Handle new files
-        // })
         monitor.on('changed', (f, curr, prev) => {
             const inputJson = JSON.parse(fs.readFileSync(inputJsonPath)); // require(`./${pa.inputPath}`);
-            console.log(`Writing output to ${outputPath} (changes to ${f})`, f);
+            console.log(`🕒Writing output to ${outputPath} (changes to ${f})`);
             runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath);
-            // const inputDir = path.parse(path.resolve(argv.input)).dir + path.sep;
-            // Handle file changes
-            // console.log('changed', f)
-            // console.log(`Writing output to ${outputPath} (changes to ${f})`, f);
-            // const newResumeTemplate = require(resumeTemplatePath);
-            // const doc = new PDFDocument();
-            // // const stream =
-            // doc.pipe(fs.createWriteStream(outputPath));
-            // newResumeTemplate.addContent(doc, newInputJson, inputDir);
         });
-        // monitor.on('removed', function (f, stat) {
-        //     // Handle removed files
-        // })
-        // monitor.stop(); // Stop watching
     });
 };
 
@@ -78,7 +56,7 @@ const argv = require('yargs')
             describe: 'The filename for the output PDF, with extension'
         });
     }, function (argv) {
-        console.log(`Trying to run with input "${argv.input}" and output "${argv.output}"`);
+        console.log(`🎉Trying to run with input "${argv.input}" and output "${argv.output}"`);
         // const pa = require('./app/util/parseArguments');
         // Example: node index.js run example-resume.json example-output.pdf -t -w
         // TODO check if input file exists (warn: if relative path, must start with ./)
@@ -92,70 +70,18 @@ const argv = require('yargs')
         const resumeTemplateDir = path.parse(path.resolve(resumeTemplatePath)).dir + path.sep;
 
         if(argv.watch) {
-            // TODO implement watch. Should watch the input.json and the template
-            console.log('Flag "watch" is not yet implemented');
+            console.log(`💾Writing initial output to "${outputPath}"`);
+            runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath);
 
             // Watch changes to the input JSON
             runOnChange(inputDir, file => {
                 return file === path.resolve(argv.input);
             }, argv.input, inputDir, outputPath, resumeTemplatePath);
 
-            // watch.createMonitor(inputDir, {
-            //     filter: file => {
-            //         // if( file === path.resolve(argv.input) ) {
-            //         //     console.log(file);
-            //         // }
-            //         return file === path.resolve(argv.input);
-            //     }
-            // }, monitor => {
-            //     // monitor.files[argv.input];
-            //     // monitor.on('created', function (f, stat) {
-            //     //     // Handle new files
-            //     // })
-            //     monitor.on('changed', (f, curr, prev) => {
-            //         const newInputJson = JSON.parse(fs.readFileSync(argv.input)); // require(`./${pa.inputPath}`);
-            //         // const inputDir = path.parse(path.resolve(argv.input)).dir + path.sep;
-            //         // Handle file changes
-            //         // console.log('changed', f)
-            //         console.log(`Writing output to ${outputPath} (changes to ${f})`, f);
-            //         const doc = new PDFDocument();
-            //         // const stream =
-            //         doc.pipe(fs.createWriteStream(outputPath));
-            //         const newResumeTemplate = require(resumeTemplatePath);
-            //         newResumeTemplate.addContent(doc, newInputJson, inputDir);
-            //     });
-            //     // monitor.on('removed', function (f, stat) {
-            //     //     // Handle removed files
-            //     // })
-            //     // monitor.stop(); // Stop watching
-            // });
             // TODO Watch changes to the template dir (can have dependencies)
-            watch.createMonitor(resumeTemplateDir, {
-                filter: file => {
-                    return path.parse(file).ext === '.js';
-                }
-            }, monitor => {
-                // monitor.files[argv.input];
-                // monitor.on('created', function (f, stat) {
-                //     // Handle new files
-                // })
-                monitor.on('changed', (f, curr, prev) => {
-                    const newInputJson = JSON.parse(fs.readFileSync(argv.input)); // require(`./${pa.inputPath}`);
-                    // const inputDir = path.parse(path.resolve(argv.input)).dir + path.sep;
-                    // Handle file changes
-                    // console.log('changed', f)
-                    console.log(`Writing output to ${outputPath} (changes to ${f})`, f);
-                    const doc = new PDFDocument();
-                    // const stream =
-                    doc.pipe(fs.createWriteStream(outputPath));
-                    const newResumeTemplate = require(resumeTemplatePath); // TODO not taking the updated template.js
-                    newResumeTemplate.addContent(doc, newInputJson, inputDir);
-                });
-                // monitor.on('removed', function (f, stat) {
-                //     // Handle removed files
-                // })
-                // monitor.stop(); // Stop watching
-            });
+            runOnChange(resumeTemplateDir, file => {
+                return path.parse(file).ext === '.js';
+            }, argv.input, inputDir, outputPath, resumeTemplatePath);
 
             // TODO write blob stream
             // TODO dev server
