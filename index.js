@@ -5,27 +5,40 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
 const watch = require('watch');
-// const fsPromise = require('../util/fsPromise');
-// const DataURI = require('datauri').promise;
+const fsPromise = require('./app/util/fsPromise');
+const dataURI = require('datauri').promise;
 
-// TODO all these static files into an object with destructuring
-const runTransformation = (inputJson, inputDir, outputPath, resumeTemplatePath) => {
+const pdfToBlob = async (outputPath) => {
+    try {
+        const dataUriOfPdf = await dataURI(outputPath);
+        const blobJsContent = `var convertedPfdDataURL = '${dataUriOfPdf}';`;
+        await fsPromise.writeFilePromise('./generated-pdf-as-blob.js', blobJsContent);
+    } catch(err) {
+        console.error(err);
+    }
+};
+
+// TODO get all these static properties from a config object with destructuring
+const runTransformation = (inputJson, inputDir, outputPath, resumeTemplatePath, isWatching) => {
     delete require.cache[require.resolve(resumeTemplatePath)];
     const newResumeTemplate = require(resumeTemplatePath);
     const doc = new PDFDocument();
-    // const stream =
-    doc.pipe(fs.createWriteStream(outputPath));
+    const stream = doc.pipe(fs.createWriteStream(outputPath));
     newResumeTemplate.addContent(doc, inputJson, inputDir);
+    if(isWatching) {
+        stream.on('finish', () => pdfToBlob(outputPath));
+        console.log('🔥Hot update');
+    }
 };
 
-const runOnChange = (watchDir, filter, inputJsonPath, inputDir, outputPath, resumeTemplatePath) => {
+const runOnChange = (watchDir, filter, inputJsonPath, inputDir, outputPath, resumeTemplatePath, isWatching) => {
     watch.createMonitor(watchDir, {
         filter
     }, monitor => {
         monitor.on('changed', (f, curr, prev) => {
             const inputJson = JSON.parse(fs.readFileSync(inputJsonPath)); // require(`./${pa.inputPath}`);
             console.log(`🕒Changed "${f}", writing output to "${outputPath}"`);
-            runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath);
+            runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath, isWatching);
         });
     });
 };
@@ -72,20 +85,21 @@ const argv = require('yargs')
 
         if(argv.watch) {
             console.log(`💾Writing initial output to "${outputPath}"`);
-            runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath);
+            const isWatching = true;
+            runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath, isWatching);
 
             // Watch changes to the input JSON
             runOnChange(inputDir, file => {
                 return file === path.resolve(argv.input);
-            }, argv.input, inputDir, outputPath, resumeTemplatePath);
+            }, argv.input, inputDir, outputPath, resumeTemplatePath, isWatching);
 
-            // TODO Watch changes to the template dir (can have dependencies)
+            // Watch changes to the template dir (can have dependencies)
             runOnChange(resumeTemplateDir, file => {
                 return path.parse(file).ext === '.js';
-            }, argv.input, inputDir, outputPath, resumeTemplatePath);
+            }, argv.input, inputDir, outputPath, resumeTemplatePath, isWatching);
 
-            // TODO write blob stream
-            // TODO dev server
+            // TODO remove old watch, add lint task
+            // TODO start dev server from node
         } else {
             // TODO E.g. use this example https://github.com/fluentdesk/jane-q-fullstacker/blob/master/resume/jane-resume.json
             const doc = new PDFDocument();
@@ -115,14 +129,5 @@ const argv = require('yargs')
 //
 // // async/await requires node 8+
 // // node transformer/pdf.js
-// const pdfToBlob = async function() {
-//     try {
-//         const dataUriOfPdf = await DataURI(outputPath);
-//         const blobJsContent = `var convertedPfdDataURL = '${dataUriOfPdf}';`;
-//         await fsPromise.writeFilePromise('./output/generated-pdf-as-blob.js', blobJsContent);
-//     } catch(err) {
-//         console.error(err);
-//     }
-// }
-//
+
 // stream.on('finish', pdfToBlob);
