@@ -120,6 +120,8 @@ function addContent(doc, inputJson, inputDir) {
 
     doc.addPage();
 
+    doc.fill('#000000');
+
     addMyStory(doc, inputJson);
     addEducation(doc, inputJson);
     addSkills(doc, inputJson);
