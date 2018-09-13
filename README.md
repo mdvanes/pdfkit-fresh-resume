@@ -1,4 +1,6 @@
-Toolkit for rendering a resume PDF with PDFKit.
+[![npm version](https://badge.fury.io/js/pdfkit-fresh-resume.svg)](https://badge.fury.io/js/pdfkit-fresh-resume)
+
+> Toolkit for rendering a resume PDF with PDFKit.
 
 Convert a resume (CV) in [FRESH format](https://github.com/fresh-standard/FRESCA) to PDF 
 with [PDFKit](http://pdfkit.org/). This includes an example resume JSON and an example theme. Inspired 
