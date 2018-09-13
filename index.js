@@ -10,7 +10,8 @@ const watch = require('watch');
 
 // TODO all these static files into an object with destructuring
 const runTransformation = (inputJson, inputDir, outputPath, resumeTemplatePath) => {
-    const newResumeTemplate = require(resumeTemplatePath); // TODO not taking the updated template.js
+    delete require.cache[require.resolve(resumeTemplatePath)];
+    const newResumeTemplate = require(resumeTemplatePath);
     const doc = new PDFDocument();
     // const stream =
     doc.pipe(fs.createWriteStream(outputPath));
@@ -23,7 +24,7 @@ const runOnChange = (watchDir, filter, inputJsonPath, inputDir, outputPath, resu
     }, monitor => {
         monitor.on('changed', (f, curr, prev) => {
             const inputJson = JSON.parse(fs.readFileSync(inputJsonPath)); // require(`./${pa.inputPath}`);
-            console.log(`🕒Writing output to ${outputPath} (changes to ${f})`);
+            console.log(`🕒Changed "${f}", writing output to "${outputPath}"`);
             runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath);
         });
     });
