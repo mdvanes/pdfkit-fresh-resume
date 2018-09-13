@@ -8,6 +8,49 @@ const watch = require('watch');
 // const fsPromise = require('../util/fsPromise');
 // const DataURI = require('datauri').promise;
 
+const runTransformation = (inputJson, inputDir, outputPath, resumeTemplatePath) => {
+    const newResumeTemplate = require(resumeTemplatePath);
+    const doc = new PDFDocument();
+    // const stream =
+    doc.pipe(fs.createWriteStream(outputPath));
+    newResumeTemplate.addContent(doc, inputJson, inputDir);
+};
+
+const runOnChange = (watchDir, filter, inputJsonPath, inputDir, outputPath, resumeTemplatePath) => {
+    watch.createMonitor(watchDir, {
+        filter
+        // filter: file => {
+        //     // if( file === path.resolve(argv.input) ) {
+        //     //     console.log(file);
+        //     // }
+        //     return file === path.resolve(argv.input);
+        // }
+    }, monitor => {
+        // monitor.files[argv.input];
+        // monitor.on('created', function (f, stat) {
+        //     // Handle new files
+        // })
+        monitor.on('changed', (f, curr, prev) => {
+            const inputJson = JSON.parse(fs.readFileSync(inputJsonPath)); // require(`./${pa.inputPath}`);
+            console.log(`Writing output to ${outputPath} (changes to ${f})`, f);
+            runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath);
+            // const inputDir = path.parse(path.resolve(argv.input)).dir + path.sep;
+            // Handle file changes
+            // console.log('changed', f)
+            // console.log(`Writing output to ${outputPath} (changes to ${f})`, f);
+            // const newResumeTemplate = require(resumeTemplatePath);
+            // const doc = new PDFDocument();
+            // // const stream =
+            // doc.pipe(fs.createWriteStream(outputPath));
+            // newResumeTemplate.addContent(doc, newInputJson, inputDir);
+        });
+        // monitor.on('removed', function (f, stat) {
+        //     // Handle removed files
+        // })
+        // monitor.stop(); // Stop watching
+    });
+};
+
 // https://github.com/yargs/yargs/blob/master/docs/examples.md
 // eslint-disable-next-line no-unused-vars
 const argv = require('yargs')
@@ -53,35 +96,39 @@ const argv = require('yargs')
             console.log('Flag "watch" is not yet implemented');
 
             // Watch changes to the input JSON
-            watch.createMonitor(inputDir, {
-                filter: file => {
-                    // if( file === path.resolve(argv.input) ) {
-                    //     console.log(file);
-                    // }
-                    return file === path.resolve(argv.input);
-                }
-            }, monitor => {
-                // monitor.files[argv.input];
-                // monitor.on('created', function (f, stat) {
-                //     // Handle new files
-                // })
-                monitor.on('changed', (f, curr, prev) => {
-                    const newInputJson = JSON.parse(fs.readFileSync(argv.input)); // require(`./${pa.inputPath}`);
-                    // const inputDir = path.parse(path.resolve(argv.input)).dir + path.sep;
-                    // Handle file changes
-                    // console.log('changed', f)
-                    console.log(`Writing output to ${outputPath} (changes to ${f})`, f);
-                    const doc = new PDFDocument();
-                    // const stream =
-                    doc.pipe(fs.createWriteStream(outputPath));
-                    const newResumeTemplate = require(resumeTemplatePath);
-                    newResumeTemplate.addContent(doc, newInputJson, inputDir);
-                });
-                // monitor.on('removed', function (f, stat) {
-                //     // Handle removed files
-                // })
-                // monitor.stop(); // Stop watching
-            });
+            runOnChange(inputDir, file => {
+                return file === path.resolve(argv.input);
+            }, argv.input, inputDir, outputPath, resumeTemplatePath);
+
+            // watch.createMonitor(inputDir, {
+            //     filter: file => {
+            //         // if( file === path.resolve(argv.input) ) {
+            //         //     console.log(file);
+            //         // }
+            //         return file === path.resolve(argv.input);
+            //     }
+            // }, monitor => {
+            //     // monitor.files[argv.input];
+            //     // monitor.on('created', function (f, stat) {
+            //     //     // Handle new files
+            //     // })
+            //     monitor.on('changed', (f, curr, prev) => {
+            //         const newInputJson = JSON.parse(fs.readFileSync(argv.input)); // require(`./${pa.inputPath}`);
+            //         // const inputDir = path.parse(path.resolve(argv.input)).dir + path.sep;
+            //         // Handle file changes
+            //         // console.log('changed', f)
+            //         console.log(`Writing output to ${outputPath} (changes to ${f})`, f);
+            //         const doc = new PDFDocument();
+            //         // const stream =
+            //         doc.pipe(fs.createWriteStream(outputPath));
+            //         const newResumeTemplate = require(resumeTemplatePath);
+            //         newResumeTemplate.addContent(doc, newInputJson, inputDir);
+            //     });
+            //     // monitor.on('removed', function (f, stat) {
+            //     //     // Handle removed files
+            //     // })
+            //     // monitor.stop(); // Stop watching
+            // });
             // TODO Watch changes to the template dir (can have dependencies)
             watch.createMonitor(resumeTemplateDir, {
                 filter: file => {
