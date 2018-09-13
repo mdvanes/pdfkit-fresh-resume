@@ -18,8 +18,7 @@ const pdfToBlob = async (outputPath) => {
     }
 };
 
-// TODO get all these static properties from a config object with destructuring
-const runTransformation = (inputJson, inputDir, outputPath, resumeTemplatePath, isWatching) => {
+const runTransformation = (inputJson, { inputDir, outputPath, resumeTemplatePath, isWatching }) => {
     delete require.cache[require.resolve(resumeTemplatePath)];
     const newResumeTemplate = require(resumeTemplatePath);
     const doc = new PDFDocument();
@@ -31,14 +30,15 @@ const runTransformation = (inputJson, inputDir, outputPath, resumeTemplatePath, 
     }
 };
 
-const runOnChange = (watchDir, filter, inputJsonPath, inputDir, outputPath, resumeTemplatePath, isWatching) => {
+const runOnChange = (watchDir, filter, config) => {
+    const { inputJsonPath, outputPath } = config;
     watch.createMonitor(watchDir, {
         filter
     }, monitor => {
         monitor.on('changed', (f, curr, prev) => {
             const inputJson = JSON.parse(fs.readFileSync(inputJsonPath)); // require(`./${pa.inputPath}`);
             console.log(`🕒Changed "${f}", writing output to "${outputPath}"`);
-            runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath, isWatching);
+            runTransformation(inputJson, config);
         });
     });
 };
@@ -86,22 +86,25 @@ const argv = require('yargs')
         if(argv.watch) {
             console.log(`💾Writing initial output to "${outputPath}"`);
             const isWatching = true;
-            runTransformation(inputJson, inputDir, outputPath, resumeTemplatePath, isWatching);
+            const inputJsonPath = argv.input;
+            const config = { inputJsonPath, inputDir, outputPath, resumeTemplatePath, isWatching };
+            runTransformation(inputJson, config);
 
             // Watch changes to the input JSON
             runOnChange(inputDir, file => {
                 return file === path.resolve(argv.input);
-            }, argv.input, inputDir, outputPath, resumeTemplatePath, isWatching);
+            }, config);
 
             // Watch changes to the template dir (can have dependencies)
             runOnChange(resumeTemplateDir, file => {
                 return path.parse(file).ext === '.js';
-            }, argv.input, inputDir, outputPath, resumeTemplatePath, isWatching);
+            }, config);
 
             // TODO remove old watch, add lint task
             // TODO start dev server from node
         } else {
             // TODO E.g. use this example https://github.com/fluentdesk/jane-q-fullstacker/blob/master/resume/jane-resume.json
+            // TODO use runTransformation here too
             const doc = new PDFDocument();
             // const stream =
             doc.pipe(fs.createWriteStream(outputPath));
@@ -110,24 +113,3 @@ const argv = require('yargs')
     })
     .help()
     .argv;
-
-// // It's probably not wise to convert this to a promise, because then the function on a higher level should be made async
-// // Also there are no (error, result) params on the callback
-// // See .finish on https://nodejs.org/api/stream.html#stream_class_stream_writable
-// //function onStreamFinishPromise(streamIn) {
-// //    return new Promise((resolve, reject) => {
-// //        streamIn.on('finish', payload, () => {
-// //            /*if(error) {
-// //                reject(error);
-// //            } else {
-// //                resolve(result);
-// //            }*/
-// //            resolve({});
-// //        });
-// //    });
-// //}
-//
-// // async/await requires node 8+
-// // node transformer/pdf.js
-
-// stream.on('finish', pdfToBlob);
