@@ -102,7 +102,6 @@ const argv = require('yargs')
 
             // TODO extract functions from this file to separate files
             // TODO add lint task
-            // TODO start dev server from node
             const webpack = require('webpack');
             const webpackDevMiddleware = require('webpack-dev-middleware');
             const webpackHotMiddleware = require('webpack-hot-middleware');
