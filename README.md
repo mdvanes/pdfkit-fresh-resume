@@ -18,7 +18,7 @@ Details about how the preview is generated:
 
 1. A Node script runs when the sources change and generates the PDF, but also a JS with a data-uri version of the PDF as a variable.
 2. A static html preview.html is served that includes the data-uri JS.
-3. To do: Browsersync will be used to watch changes to the data-uri JS and will refresh preview.html in the browser.
+3. Webpack dev middleware is used to watch changes to the data-uri JS and will refresh the preview in the browser.
 
 
 # Run
@@ -41,12 +41,9 @@ options:
 
 ## Running with -w/--watch
 
-This is an experimental feature
-
 * `pdfkit-fresh-resume run ~/.npm/pdfkit-fresh-resume/example-resume.json output.pdf -w`
-* Run `http-server` in another terminal
-* Open  http://localhost:8080/preview.html in the browser
-* After updating the template or the input JSON, the console will log "🔥Hot update". After that refresh the browser while clearing the cache to see changes. 
+* Open http://localhost:3456 in the browser to see the preview for the PDF.
+* After updating the template or the input JSON, the console will log "🔥Hot update". After that the browser will reload and show the changes.  
 
 
 # TODO
