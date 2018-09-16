@@ -105,9 +105,14 @@ const argv = require('yargs')
             // TODO start dev server from node
             const webpack = require('webpack');
             const webpackDevMiddleware = require('webpack-dev-middleware');
+            const webpackHotMiddleware = require('webpack-hot-middleware');
+
             const HtmlWebpackPlugin = require('html-webpack-plugin');
             const compiler = webpack({
-                entry: './preview/index.js',
+                entry: [
+                    'webpack-hot-middleware/client?reload=true',
+                    './preview/index.js'
+                ],
                 mode: 'development',
                 devServer: {
                     contentBase: './preview-output'
@@ -115,7 +120,8 @@ const argv = require('yargs')
                 plugins: [
                     new HtmlWebpackPlugin({
                         title: 'Preview page'
-                    })
+                    }),
+                    new webpack.HotModuleReplacementPlugin(),
                 ],
                 output: {
                     path: path.resolve(__dirname, 'preview-output'),
@@ -130,6 +136,8 @@ const argv = require('yargs')
                 // webpack-dev-middleware options
                 publicPath: '/'
             }));
+
+            app.use(webpackHotMiddleware(compiler));
 
             // TODO add chalk for output logging
             app.listen(3456, () => console.log('Preview server listening on port 3456!'))
