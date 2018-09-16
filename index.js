@@ -100,8 +100,39 @@ const argv = require('yargs')
                 return path.parse(file).ext === '.js';
             }, config);
 
-            // TODO remove old watch, add lint task
+            // TODO extract functions from this file to separate files
+            // TODO add lint task
             // TODO start dev server from node
+            const webpack = require('webpack');
+            const webpackDevMiddleware = require('webpack-dev-middleware');
+            const HtmlWebpackPlugin = require('html-webpack-plugin');
+            const compiler = webpack({
+                entry: './preview/index.js',
+                mode: 'development',
+                devServer: {
+                    contentBase: './preview-output'
+                },
+                plugins: [
+                    new HtmlWebpackPlugin({
+                        title: 'Preview page'
+                    })
+                ],
+                output: {
+                    path: path.resolve(__dirname, 'preview-output'),
+                    filename: 'bundle.js',
+                    publicPath: '/'
+                }
+            });
+            const express = require('express');
+            const app = express();
+
+            app.use(webpackDevMiddleware(compiler, {
+                // webpack-dev-middleware options
+                publicPath: '/'
+            }));
+
+            // TODO add chalk for output logging
+            app.listen(3456, () => console.log('Preview server listening on port 3456!'))
         } else {
             // TODO E.g. use this example https://github.com/fluentdesk/jane-q-fullstacker/blob/master/resume/jane-resume.json
             // TODO use runTransformation here too
