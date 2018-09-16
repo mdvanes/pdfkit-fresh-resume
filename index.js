@@ -11,8 +11,8 @@ const dataURI = require('datauri').promise;
 const pdfToBlob = async (outputPath) => {
     try {
         const dataUriOfPdf = await dataURI(outputPath);
-        const blobJsContent = `var convertedPfdDataURL = '${dataUriOfPdf}';`;
-        await fsPromise.writeFilePromise('./generated-pdf-as-blob.js', blobJsContent);
+        const blobJsContent = `export const convertedPfdDataURL = '${dataUriOfPdf}';`;
+        await fsPromise.writeFilePromise('./preview/generated-pdf-as-blob.js', blobJsContent);
     } catch(err) {
         console.error(err);
     }
