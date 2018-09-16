@@ -1,6 +1,6 @@
 {
   "name": "pdfkit-fresh-resume",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Convert a resume (CV) in FRESH format to PDF with PDFKit. This includes an example resume JSON and an example theme.",
   "homepage": "https://github.com/mdvanes/pdfkit-fresh-resume",
   "repository": {
